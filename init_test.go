@@ -15,7 +15,6 @@ import (
 	"flag"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"net"
 	"net/http"
@@ -75,7 +74,7 @@ func runTestMain(m *testing.M) (err error) {
 	var logOutput *os.File
 
 	if logFile == "" {
-		logOutput, err = ioutil.TempFile("", "gofakes3-*.log")
+		logOutput, err = os.CreateTemp("", "gofakes3-*.log")
 	} else {
 		logOutput, err = os.Create(logFile)
 	}
@@ -267,7 +266,7 @@ func (ts *testServer) backendGetString(bucket, key string, rnge *gofakes3.Object
 			ts.Error(err)
 		}
 	}()
-	data, err := ioutil.ReadAll(obj.Contents)
+	data, err := io.ReadAll(obj.Contents)
 	ts.OK(err)
 
 	return string(data)
@@ -818,7 +817,7 @@ func readBody(tt gofakes3.TT, body interface{}) []byte {
 	case []byte:
 		return body
 	case io.Reader:
-		out, err := ioutil.ReadAll(body)
+		out, err := io.ReadAll(body)
 		tt.OK(err)
 		return out
 	default:

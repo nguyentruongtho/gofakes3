@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"mime/multipart"
 	"net/http"
 	"net/http/httputil"
@@ -402,7 +401,7 @@ func TestCopyObject(t *testing.T) {
 			t.Error(err)
 		}
 	}()
-	data, err := ioutil.ReadAll(obj.Contents)
+	data, err := io.ReadAll(obj.Contents)
 	ts.OK(err)
 
 	if string(data) != "content" {
@@ -449,7 +448,7 @@ func TestCopyObjectWithSpecialChars(t *testing.T) {
 	if err != nil {
 		t.Fatalf("object not found with key %v", srcKey)
 	}
-	objContent, err := ioutil.ReadAll(obj.Body)
+	objContent, err := io.ReadAll(obj.Body)
 	ts.OK(err)
 	if !bytes.Equal([]byte(content), objContent) {
 		ts.Fatalf("object contents are different %v!=%v", content, objContent)
@@ -617,7 +616,7 @@ func TestGetObjectRange(t *testing.T) {
 				}
 			}()
 
-			out, err := ioutil.ReadAll(obj.Body)
+			out, err := io.ReadAll(obj.Body)
 			ts.OK(err)
 			if !bytes.Equal(expected, out) {
 				ts.Fatal("range failed", hdr, err)
@@ -943,7 +942,7 @@ func TestObjectVersions(t *testing.T) {
 				ts.Error(err)
 			}
 		}()
-		bts, err := ioutil.ReadAll(out.Body)
+		bts, err := io.ReadAll(out.Body)
 		ts.OK(err)
 		if !bytes.Equal(bts, contents) {
 			ts.Fatal("body mismatch. found:", string(bts), "expected:", string(contents))

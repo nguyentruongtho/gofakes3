@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -82,7 +81,7 @@ func (t *S300001GetVersionAfterVersioningSuspended) Run(ctx *Context) error {
 				err = closeErr
 			}
 		}()
-		return ioutil.ReadAll(rdr)
+		return io.ReadAll(rdr)
 	}
 
 	for ver, body := range versions {
