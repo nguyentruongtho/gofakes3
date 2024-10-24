@@ -1,10 +1,10 @@
 package main
 
 import (
+	"crypto/rand"
 	"encoding/hex"
 	"errors"
 	"fmt"
-	"math/rand"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
@@ -19,7 +19,10 @@ func (s S300007BucketVersioningNoSuchBucket) Run(ctx *Context) error {
 	client := ctx.S3Client()
 
 	var b [40]byte
-	rand.Read(b[:])
+	_, err := rand.Read(b[:])
+	if err != nil {
+		return err
+	}
 	bucket := hex.EncodeToString(b[:])
 
 	{ // GetBucketVersioning
