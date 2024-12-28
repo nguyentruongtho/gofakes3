@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	xml "github.com/rclone/gofakes3/xml"
+	xml "github.com/minio/xxml"
 )
 
 // Error codes are documented here:

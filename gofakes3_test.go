@@ -16,7 +16,7 @@ import (
 	"testing"
 	"time"
 
-	xml "github.com/rclone/gofakes3/xml"
+	xml "github.com/minio/xxml"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
