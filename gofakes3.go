@@ -235,6 +235,11 @@ func (g *GoFakeS3) listBucket(bucketName string, w http.ResponseWriter, r *http.
 	}
 
 	isVersion2 := q.Get("list-type") == "2"
+	encodingType := q.Get("encoding-type")
+	useUrlEncoding := encodingType == "url"
+	if !useUrlEncoding && encodingType != "" {
+		return ErrInvalidArgument
+	}
 
 	g.log.Print(LogInfo, "bucketname:", bucketName, "prefix:", prefix, "page:", fmt.Sprintf("%+v", page))
 
@@ -266,9 +271,19 @@ func (g *GoFakeS3) listBucket(bucketName string, w http.ResponseWriter, r *http.
 		Contents:       objects.Contents,
 		IsTruncated:    objects.IsTruncated,
 		Delimiter:      prefix.Delimiter,
-		Prefix:         URLEncode(prefix.Prefix),
+		Prefix:         prefix.Prefix,
 		MaxKeys:        page.MaxKeys,
-		EncodingType:   "url",
+		EncodingType:   encodingType,
+	}
+	if useUrlEncoding {
+		base.Prefix = URLEncode(base.Prefix)
+		for i := range base.CommonPrefixes {
+			prefix := &base.CommonPrefixes[i]
+			prefix.Prefix = URLEncode(prefix.Prefix)
+		}
+		for _, content := range base.Contents {
+			content.Key = URLEncode(content.Key)
+		}
 	}
 
 	if !isVersion2 {
