@@ -268,6 +268,7 @@ func (g *GoFakeS3) listBucket(bucketName string, w http.ResponseWriter, r *http.
 		Delimiter:      prefix.Delimiter,
 		Prefix:         URLEncode(prefix.Prefix),
 		MaxKeys:        page.MaxKeys,
+		EncodingType:   "url",
 	}
 
 	if !isVersion2 {
@@ -289,7 +290,6 @@ func (g *GoFakeS3) listBucket(bucketName string, w http.ResponseWriter, r *http.
 			KeyCount:             int64(len(objects.CommonPrefixes) + len(objects.Contents)),
 			StartAfter:           q.Get("start-after"),
 			ContinuationToken:    q.Get("continuation-token"),
-			EncodingType:         "url",
 		}
 		if objects.NextMarker != "" {
 			// We are just cheating with these continuation tokens; they're just the NextMarker
