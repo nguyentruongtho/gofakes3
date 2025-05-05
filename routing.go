@@ -60,8 +60,8 @@ func (g *GoFakeS3) routeBase(w http.ResponseWriter, r *http.Request) {
 	} else if bucket != "" {
 		err = g.routeBucket(bucket, w, r)
 
-	} else if r.Method == "GET" {
-		err = g.listBuckets(w, r)
+	// } else if r.Method == "GET" {
+	// 	err = g.listBuckets(w, r)
 
 	} else {
 		http.NotFound(w, r)
